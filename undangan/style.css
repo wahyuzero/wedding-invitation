@@ -1,0 +1,152 @@
+/* ========================================================================= */
+/* DUSTY BLUE & PEARL WHITE WEDDING INVITATION - STYLESHEET */
+/* ========================================================================= */
+
+@layer utilities {
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0px) rotate(0deg);
+    }
+    50% {
+      transform: translateY(-8px) rotate(0.8deg);
+    }
+  }
+
+  @keyframes spinSlow {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes pulseGlow {
+    0%, 100% {
+      box-shadow: 0 0 15px rgba(116, 154, 192, 0.25);
+    }
+    50% {
+      box-shadow: 0 0 35px rgba(116, 154, 192, 0.55);
+    }
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: scale(0.97);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeInDown {
+    from {
+      opacity: 0;
+      transform: translateY(-24px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+.animate-float {
+  animation: float 4.5s ease-in-out infinite;
+}
+
+.animate-spin-slow {
+  animation: spinSlow 18s linear infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 3s ease-in-out infinite;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-fade-in-down {
+  animation: fadeInDown 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Custom Scrollbar for Dusty Blue Theme */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(220, 232, 243, 0.6);
+  border-radius: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(116, 154, 192, 0.5);
+  border-radius: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(61, 92, 128, 0.8);
+}
+
+/* Pearl Frosted Glass Cards */
+.pearl-card {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1.5px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 20px 45px -15px rgba(37, 62, 92, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.pearl-card:hover {
+  border-color: rgba(255, 255, 255, 1);
+  box-shadow: 0 25px 55px -15px rgba(37, 62, 92, 0.18), inset 0 1px 0 rgba(255, 255, 255, 1);
+}
+
+/* Bottom Navigation Active States */
+.nav-item.active {
+  color: #253e5c;
+  position: relative;
+  font-weight: 700;
+}
+.nav-item.active::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  width: 18px;
+  height: 2.5px;
+  background-color: #3d5c80;
+  border-radius: 9999px;
+  box-shadow: 0 0 8px rgba(61, 92, 128, 0.6);
+}
+
+/* Toast styling */
+.toast-item {
+  animation: fadeInUp 0.35s ease-out forwards, fadeOut 0.35s ease-in forwards 2.65s;
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+}
