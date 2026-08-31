@@ -1,46 +1,39 @@
 /**
  * =========================================================================
- * WEDDING INVITATION INTERACTIVE SCRIPT - ADRIAN & NATASHA
+ * WEDDING INVITATION SCRIPT - ADRIAN & NATASHA
  * =========================================================================
  */
 
-// Global Audio & State Variables
 let isAudioPlaying = false;
 let audioContext = null;
 let audioInterval = null;
 let currentLightboxIndex = 1;
 
-// Lightbox Data
+// 4 Gallery Photos
 const galleryData = [
   {
     id: 1,
     title: "The Royal Portrait",
     desc: "Momen keanggunan busana adat bernuansa Navy & Pure White.",
-    icon: `<svg class="w-24 h-24 text-white mb-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>`
+    icon: `<svg class="w-20 h-20 text-white mb-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>`
   },
   {
     id: 2,
     title: "Warm Sunset Embrace",
     desc: "Hangatnya mentari sore menjadi saksi tawa dan cinta kami.",
-    icon: `<svg class="w-24 h-24 text-white mb-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>`
+    icon: `<svg class="w-20 h-20 text-white mb-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>`
   },
   {
     id: 3,
     title: "Precious Promise",
     desc: "Cincin pertunangan sebagai simbol komitmen selamanya.",
-    icon: `<svg class="w-24 h-24 text-white mb-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`
+    icon: `<svg class="w-20 h-20 text-white mb-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`
   },
   {
     id: 4,
-    title: "Classic Elegance",
-    desc: "Sentuhan minimalis modern dengan suasana monokrom dan kehangatan.",
-    icon: `<svg class="w-24 h-24 text-white mb-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>`
-  },
-  {
-    id: 5,
     title: "Eternal Symphony",
     desc: "Menatap masa depan bersama dengan penuh harapan dan doa.",
-    icon: `<svg class="w-24 h-24 text-white mb-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`
+    icon: `<svg class="w-20 h-20 text-white mb-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`
   }
 ];
 
@@ -107,7 +100,6 @@ function initGuestName() {
     coverElement.textContent = decodeURIComponent(guestName);
   }
 
-  // Pre-fill RSVP name if available
   const rsvpNameInput = document.getElementById("rsvp-name");
   if (rsvpNameInput && guestName !== "Tamu Undangan") {
     rsvpNameInput.value = decodeURIComponent(guestName);
@@ -115,7 +107,7 @@ function initGuestName() {
 }
 
 // =============================================================================
-// 2. OPENING COVER & AUDIO SYSTEM (Synthesized Romantic Ambient Chords)
+// 2. OPENING COVER & AUDIO SYSTEM (Web Audio API Synthesizer)
 // =============================================================================
 function initEvents() {
   const btnOpen = document.getElementById("btn-open-invitation");
@@ -124,14 +116,12 @@ function initEvents() {
 
   if (btnOpen) {
     btnOpen.addEventListener("click", () => {
-      // Smooth cover fade out and slide up
       cover.style.opacity = "0";
       cover.style.transform = "translateY(-100%)";
       setTimeout(() => {
         cover.style.display = "none";
       }, 1000);
 
-      // Start romantic ambient audio on user gesture
       startRomanticAudio();
       showToast("Selamat datang di undangan kami! ✨");
     });
@@ -144,9 +134,6 @@ function initEvents() {
   }
 }
 
-/**
- * Web Audio API Soothing Ambient Romantic Harp/Piano Chords
- */
 function startRomanticAudio() {
   try {
     const AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -163,7 +150,6 @@ function startRomanticAudio() {
     isAudioPlaying = true;
     updateAudioUI(true);
 
-    // Chords progression: Dmaj9 -> Bm7 -> Gmaj7 -> A7sus4
     const chords = [
       [293.66, 369.99, 440.00, 554.37, 659.25],
       [246.94, 293.66, 369.99, 440.00, 587.33],
@@ -204,7 +190,7 @@ function startRomanticAudio() {
     audioInterval = setInterval(playArpeggio, 3500);
 
   } catch (err) {
-    console.warn("Audio initialization notice:", err);
+    console.warn("Audio notice:", err);
   }
 }
 
@@ -247,7 +233,7 @@ function updateAudioUI(playing) {
 }
 
 // =============================================================================
-// 3. CELESTIAL STARDUST / STARFIELD CANVAS ANIMATION
+// 3. CELESTIAL STARDUST / STARFIELD CANVAS
 // =============================================================================
 function initStarfield() {
   const canvas = document.getElementById("starfield");
@@ -263,13 +249,13 @@ function initStarfield() {
   });
 
   const stars = [];
-  const starCount = Math.min(Math.floor(width * 0.09), 90);
+  const starCount = Math.min(Math.floor(width * 0.08), 85);
 
   for (let i = 0; i < starCount; i++) {
     stars.push({
       x: Math.random() * width,
       y: Math.random() * height,
-      radius: Math.random() * 1.6 + 0.5,
+      radius: Math.random() * 1.5 + 0.5,
       alpha: Math.random() * 0.7 + 0.3,
       speed: Math.random() * 0.3 + 0.1,
       twinkleSpeed: Math.random() * 0.02 + 0.005,
@@ -295,7 +281,7 @@ function initStarfield() {
       ctx.beginPath();
       ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
       ctx.fillStyle = `rgba(255, 255, 255, ${star.alpha})`;
-      ctx.shadowBlur = 5;
+      ctx.shadowBlur = 4;
       ctx.shadowColor = "#ffffff";
       ctx.fill();
     });
@@ -361,32 +347,42 @@ window.addToCalendar = function(title, startISO, endISO, location) {
 };
 
 // =============================================================================
-// 6. RSVP SUBMISSION HANDLER
+// 6. COMBINED RSVP & WISHES SUBMIT HANDLER
 // =============================================================================
-window.handleRSVPSubmit = function(event) {
+window.handleCombinedRSVPSubmit = function(event) {
   event.preventDefault();
   const name = document.getElementById("rsvp-name").value.trim();
-  const phone = document.getElementById("rsvp-phone").value.trim();
-  const status = document.querySelector('input[name="rsvp_status"]:checked').value;
+  const status = document.getElementById("rsvp-status").value;
   const pax = document.getElementById("rsvp-pax").value;
-  const session = document.getElementById("rsvp-session").value;
+  const wish = document.getElementById("rsvp-wish").value.trim();
 
-  if (!name) {
-    showToast("Mohon isi nama lengkap Anda.");
+  if (!name || !wish) {
+    showToast("Mohon lengkapi nama dan doa restu Anda.");
     return;
   }
 
-  const rsvpEntry = { name, phone, status, pax, session, timestamp: new Date().toISOString() };
+  // 1. Save RSVP to localStorage
+  const rsvpEntry = { name, status, pax, timestamp: new Date().toISOString() };
   const storedRSVP = JSON.parse(localStorage.getItem("wedding_rsvp_list") || "[]");
   storedRSVP.push(rsvpEntry);
   localStorage.setItem("wedding_rsvp_list", JSON.stringify(storedRSVP));
 
-  showToast(`Terima kasih ${name}, konfirmasi kehadiran berhasil dikirim! 🎉`);
+  // 2. Add Wish to wall
+  const newWish = {
+    id: Date.now(),
+    name,
+    time: "Baru saja",
+    content: wish,
+    likes: 1,
+    liked: true
+  };
 
-  const wishAuthor = document.getElementById("wish-author");
-  if (wishAuthor && !wishAuthor.value) {
-    wishAuthor.value = name;
-  }
+  wishesData.unshift(newWish);
+  localStorage.setItem("wedding_wishes_list", JSON.stringify(wishesData));
+  renderWishes();
+
+  document.getElementById("rsvp-wish").value = "";
+  showToast(`Terima kasih ${name}, konfirmasi & doa restu berhasil dikirim! 🎉`);
 };
 
 // =============================================================================
@@ -434,36 +430,6 @@ function renderWishes() {
   `).join("");
 }
 
-window.handleWishSubmit = function(event) {
-  event.preventDefault();
-  const authorInput = document.getElementById("wish-author");
-  const contentInput = document.getElementById("wish-content");
-
-  const name = authorInput.value.trim();
-  const content = contentInput.value.trim();
-
-  if (!name || !content) {
-    showToast("Mohon lengkapi nama dan doa restu Anda.");
-    return;
-  }
-
-  const newWish = {
-    id: Date.now(),
-    name,
-    time: "Baru saja",
-    content,
-    likes: 1,
-    liked: true
-  };
-
-  wishesData.unshift(newWish);
-  localStorage.setItem("wedding_wishes_list", JSON.stringify(wishesData));
-  renderWishes();
-
-  contentInput.value = "";
-  showToast("Doa restu Anda telah dipublikasikan! Terima kasih ❤️");
-};
-
 window.toggleWishLike = function(index) {
   if (wishesData[index]) {
     if (wishesData[index].liked) {
@@ -496,17 +462,15 @@ window.switchGiftTab = function(tabName) {
   const tabQris = document.getElementById("tab-btn-qris");
   const tabPhys = document.getElementById("tab-btn-physical");
 
-  // Hide all
   bankContent.classList.add("hidden");
   qrisContent.classList.add("hidden");
   physContent.classList.add("hidden");
 
-  // Reset tab active styles
   [tabBank, tabQris, tabPhys].forEach((btn) => {
-    btn.className = "px-5 py-2.5 rounded-xl text-xs font-bold tracking-wider transition-all text-slate-300 hover:text-white";
+    btn.className = "px-5 py-2 rounded-xl text-xs font-bold tracking-wider transition-all text-slate-300 hover:text-white";
   });
 
-  const activeClasses = "px-5 py-2.5 rounded-xl text-xs font-bold tracking-wider transition-all bg-white text-navy-950 shadow-md";
+  const activeClasses = "px-5 py-2 rounded-xl text-xs font-bold tracking-wider transition-all bg-white text-navy-950 shadow-md";
 
   if (tabName === "bank") {
     bankContent.classList.remove("hidden");
@@ -602,7 +566,6 @@ function updateLightboxContent() {
   }
 }
 
-// Keyboard navigation for lightbox
 window.addEventListener("keydown", (e) => {
   const modal = document.getElementById("lightbox-modal");
   if (modal && !modal.classList.contains("hidden")) {
