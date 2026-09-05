@@ -125,6 +125,13 @@ function initGuestName() {
   if (rsvpNameInput && guestName !== "Tamu Undangan") {
     rsvpNameInput.value = decodeURIComponent(guestName);
   }
+
+  if (urlParams.get("opened") === "true") {
+    const cover = document.getElementById("opening-cover");
+    if (cover) cover.style.display = "none";
+    document.body.classList.remove("overflow-hidden");
+    document.documentElement.classList.remove("overflow-hidden");
+  }
 }
 
 // =============================================================================
@@ -254,12 +261,15 @@ function openWeddingInvitation() {
       cover.style.transform = "translateY(-100%) scale(1.05)";
       cover.style.filter = "blur(10px)";
     }
+    // Enable full page scrolling after invitation opens
+    document.body.classList.remove("overflow-hidden");
+    document.documentElement.classList.remove("overflow-hidden");
     showToast("Selamat datang di pernikahan Adrian & Natasha! ✨");
-  }, 1250);
+  }, 1350);
 
   setTimeout(() => {
     if (cover) cover.style.display = "none";
-  }, 2200);
+  }, 2300);
 }
 
 // =============================================================================

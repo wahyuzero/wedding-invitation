@@ -152,48 +152,67 @@
 }
 
 /* ========================================================================= */
-/* 1. INTERACTIVE 3D WAX SEAL & ENVELOPE UNBOXING (DUSTY BLUE & PEARL) */
+/* 1. INTERACTIVE 3D WAX SEAL & ENVELOPE UNBOXING (BRIDE DUSTY BLUE & PEARL) */
 /* ========================================================================= */
 
 .envelope-3d-stage {
-  perspective: 1400px;
-  transform-style: preserve-3d;
+  perspective: 1200px;
 }
 
 .envelope-wrapper {
   position: relative;
   width: 100%;
-  max-width: 440px;
-  height: 380px;
+  max-width: 420px;
+  height: 275px;
   margin: 0 auto;
   transform-style: preserve-3d;
-  transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-/* Base envelope background pocket */
+/* 1. Back of envelope */
 .envelope-back {
   position: absolute;
   inset: 0;
-  border-radius: 24px;
-  background: linear-gradient(145deg, #edf3f8, #dce8f3);
-  border: 1.5px solid rgba(255, 255, 255, 0.9);
-  box-shadow: 0 25px 60px -15px rgba(37, 62, 92, 0.2), 0 0 40px rgba(180, 205, 228, 0.4);
+  border-radius: 18px;
+  background: linear-gradient(145deg, #edf4fa, #dce8f3);
+  border: 1.5px solid rgba(255, 255, 255, 0.95);
+  box-shadow: 0 25px 60px -10px rgba(37, 62, 92, 0.18), 0 0 40px rgba(180, 205, 228, 0.3);
   z-index: 1;
 }
 
-/* The luxury invitation letter inside */
+/* Interior luxury liner */
+.envelope-liner {
+  position: absolute;
+  top: 8px;
+  left: 10px;
+  right: 10px;
+  height: 180px;
+  background: radial-gradient(circle at 50% 30%, rgba(197, 168, 104, 0.2), transparent 70%),
+              linear-gradient(180deg, #dce8f3, #c4d8ea);
+  border-radius: 12px;
+  border: 1px dashed rgba(197, 168, 104, 0.45);
+  z-index: 2;
+}
+
+/* 2. The Royal Invitation card nestled inside */
 .envelope-card {
   position: absolute;
-  left: 14px;
-  right: 14px;
-  bottom: 12px;
-  top: 14px;
-  border-radius: 20px;
+  left: 16px;
+  right: 16px;
+  bottom: 10px;
+  height: 245px;
+  border-radius: 14px;
   background: #ffffff;
-  border: 1.5px solid rgba(196, 216, 234, 0.7);
-  box-shadow: 0 10px 30px rgba(37, 62, 92, 0.12), inset 0 0 20px rgba(255, 255, 255, 0.8);
-  z-index: 2;
-  transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1) 0.5s, box-shadow 0.8s;
+  border: 1.5px solid rgba(197, 168, 104, 0.55);
+  box-shadow: 0 10px 25px rgba(37, 62, 92, 0.15);
+  z-index: 3;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  text-align: center;
+  color: #13263e;
+  transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.4s;
   will-change: transform;
 }
 
@@ -203,55 +222,43 @@
   box-shadow: 0 25px 50px rgba(37, 62, 92, 0.25), 0 0 35px rgba(255, 255, 255, 0.8);
 }
 
-/* Lower front triangular flaps */
-.envelope-pocket-bottom {
+/* 3. Front pocket (opaque pocket holding the card) */
+.envelope-front-pocket {
   position: absolute;
-  inset: 0;
-  border-radius: 24px;
-  clip-path: polygon(0% 100%, 50% 48%, 100% 100%);
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 175px;
+  border-radius: 0 0 18px 18px;
   background: linear-gradient(0deg, #d8e5f1 0%, #edf3f8 100%);
-  border-bottom: 2px solid rgba(255, 255, 255, 0.95);
-  z-index: 4;
-  pointer-events: none;
+  border: 1.5px solid rgba(255, 255, 255, 0.95);
+  border-top: none;
+  /* V-shaped dip at top of front pocket */
+  clip-path: polygon(0% 0%, 50% 35px, 100% 0%, 100% 100%, 0% 100%);
+  box-shadow: 0 -5px 15px rgba(37, 62, 92, 0.08);
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding-bottom: 22px;
 }
 
-.envelope-pocket-left {
-  position: absolute;
-  inset: 0;
-  border-radius: 24px;
-  clip-path: polygon(0% 0%, 0% 100%, 50% 55%);
-  background: linear-gradient(90deg, #dbe7f2 0%, #e8f0f7 100%);
-  z-index: 3;
-  pointer-events: none;
-  opacity: 0.95;
-}
-
-.envelope-pocket-right {
-  position: absolute;
-  inset: 0;
-  border-radius: 24px;
-  clip-path: polygon(100% 0%, 100% 100%, 50% 55%);
-  background: linear-gradient(270deg, #dbe7f2 0%, #e8f0f7 100%);
-  z-index: 3;
-  pointer-events: none;
-  opacity: 0.95;
-}
-
-/* Top Triangular Flap (Folds Open in 3D) */
+/* 4. Top Folding Triangular Flap */
 .envelope-flap-top {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  height: 52%;
+  height: 145px;
   transform-origin: top center;
   transform-style: preserve-3d;
   clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
   background: linear-gradient(180deg, #e4edf5 0%, #c9ddec 100%);
   border-top: 1.5px solid rgba(255, 255, 255, 0.95);
-  box-shadow: 0 10px 25px rgba(37, 62, 92, 0.15);
-  z-index: 5;
-  transition: transform 0.85s cubic-bezier(0.4, 0, 0.2, 1), z-index 0.01s 0.4s;
+  box-shadow: 0 10px 20px rgba(37, 62, 92, 0.12);
+  z-index: 6;
+  transition: transform 0.85s cubic-bezier(0.4, 0, 0.2, 1), z-index 0.01s 0.42s;
   will-change: transform;
 }
 
@@ -261,27 +268,26 @@
   z-index: 1;
 }
 
-/* Realistic 3D Embossed Champagne Gold Wax Seal */
+/* 5. Realistic 3D Embossed Champagne Gold Wax Seal */
 .wax-seal-btn {
   position: absolute;
-  top: 50%;
+  top: 135px;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 76px;
-  height: 76px;
+  width: 72px;
+  height: 72px;
   border-radius: 50%;
   background: radial-gradient(circle at 35% 32%, #fff3c4 0%, #e8c676 25%, #c5a868 55%, #947738 85%, #634c1b 100%);
   box-shadow:
-    0 10px 25px -4px rgba(37, 62, 92, 0.4),
+    0 8px 20px rgba(37, 62, 92, 0.35),
     0 0 25px rgba(197, 168, 104, 0.5),
-    inset 0 2px 4px rgba(255, 255, 255, 0.8),
-    inset 0 -3px 6px rgba(0, 0, 0, 0.35);
+    inset 0 2px 3px rgba(255, 255, 255, 0.85);
   border: 1.5px solid rgba(255, 245, 180, 0.7);
   cursor: pointer;
   z-index: 10;
-  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s, opacity 0.3s;
   display: flex;
-  items-center;
+  align-items: center;
   justify-content: center;
 }
 
@@ -299,8 +305,8 @@
 }
 
 .wax-seal-inner {
-  width: 58px;
-  height: 58px;
+  width: 54px;
+  height: 54px;
   border-radius: 50%;
   border: 1.8px dashed rgba(255, 245, 195, 0.85);
   box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3);
@@ -311,28 +317,10 @@
   background: radial-gradient(circle at 40% 40%, rgba(255, 255, 255, 0.2), transparent 70%);
 }
 
-.wax-seal-btn.is-cracking {
-  animation: waxCrackBreak 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+.envelope-wrapper.is-open .wax-seal-btn {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.25);
   pointer-events: none;
-}
-
-@keyframes waxCrackBreak {
-  0% {
-    transform: translate(-50%, -50%) scale(1);
-    filter: brightness(1.2);
-  }
-  30% {
-    transform: translate(-50%, -50%) scale(1.18) rotate(3deg);
-    filter: brightness(1.5);
-  }
-  60% {
-    transform: translate(-50%, -50%) scale(0.9) rotate(-3deg);
-    opacity: 0.9;
-  }
-  100% {
-    transform: translate(-50%, -50%) scale(0.3);
-    opacity: 0;
-  }
 }
 
 /* ========================================================================= */

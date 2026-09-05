@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id" class="scroll-smooth">
+<html lang="id" class="scroll-smooth overflow-hidden">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -53,7 +53,7 @@
   <!-- Custom Stylesheet -->
   <link rel="stylesheet" href="style.css">
 </head>
-<body class="bg-gradient-to-b from-[#f2f7fb] via-[#e2edf7] to-[#e8f1f8] text-dusty-900 font-sans antialiased selection:bg-dusty-500 selection:text-white relative overflow-x-hidden min-h-screen">
+<body class="bg-gradient-to-b from-[#f2f7fb] via-[#e2edf7] to-[#e8f1f8] text-dusty-900 font-sans antialiased selection:bg-dusty-500 selection:text-white relative overflow-x-hidden min-h-screen overflow-hidden">
 
   <!-- Subtle Editorial Film Grain Noise Texture -->
   <div class="film-grain"></div>
@@ -64,7 +64,7 @@
   <!-- ========================================================================= -->
   <!-- 1. LUXURY 3D WAX SEAL ENVELOPE UNBOXING (BRIDE EDITION - DUSTY BLUE & PEARL) -->
   <!-- ========================================================================= -->
-  <div id="opening-cover" class="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-b from-[#edf3f8]/95 via-[#dce8f3]/95 to-[#cddfed]/95 backdrop-blur-xl overflow-y-auto px-4 py-8 transition-all duration-1000">
+  <div id="opening-cover" class="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-b from-[#edf3f8]/95 via-[#dce8f3]/95 to-[#cddfed]/95 backdrop-blur-xl overflow-hidden px-4 py-8 transition-all duration-1000">
     <div class="absolute inset-0 overflow-hidden pointer-events-none opacity-50">
       <div class="absolute -top-32 -left-32 w-96 h-96 bg-dusty-300 rounded-full blur-3xl animate-pulse"></div>
       <div class="absolute -bottom-32 -right-32 w-96 h-96 bg-blue-200 rounded-full blur-3xl animate-pulse" style="animation-delay: 2s;"></div>
@@ -82,76 +82,64 @@
         </div>
       </div>
 
-      <!-- THE 3D ENVELOPE STAGE -->
+      <!-- THE 3D ENVELOPE STAGE (BRIDE EDITION) -->
       <div class="envelope-3d-stage w-full py-4">
         <div id="envelope-wrapper" class="envelope-wrapper">
           
-          <!-- Back Interior Pocket of Envelope -->
+          <!-- 1. Back of Envelope -->
           <div class="envelope-back"></div>
 
-          <!-- THE ROYAL INVITATION CARD (SLIDES OUT UPON OPENING) -->
-          <div id="envelope-letter" class="envelope-card p-6 flex flex-col items-center justify-between text-center overflow-hidden">
-            
+          <!-- 2. Interior Luxury Liner -->
+          <div class="envelope-liner"></div>
+
+          <!-- 3. The Royal Invitation Card (Tucked Inside, Slides Up on Open) -->
+          <div id="envelope-letter" class="envelope-card p-5 flex flex-col items-center justify-between text-center overflow-hidden">
             <!-- Shimmer Accent Line -->
-            <div class="w-full flex items-center justify-between opacity-80 mb-2">
-              <span class="w-8 h-px bg-gradient-to-r from-transparent via-champagne-400 to-transparent"></span>
-              <span class="font-cinzel text-[10px] tracking-widest text-dusty-700 uppercase font-semibold">The Wedding Celebration</span>
-              <span class="w-8 h-px bg-gradient-to-r from-transparent via-champagne-400 to-transparent"></span>
+            <div class="w-full flex items-center justify-between opacity-85">
+              <span class="w-6 h-px bg-gradient-to-r from-transparent via-champagne-400 to-transparent"></span>
+              <span class="font-cinzel text-[9px] tracking-widest text-dusty-700 uppercase font-semibold">The Wedding Celebration</span>
+              <span class="w-6 h-px bg-gradient-to-r from-transparent via-champagne-400 to-transparent"></span>
             </div>
 
             <!-- Monogram Crest -->
-            <div class="w-14 h-14 rounded-full border border-dusty-400 flex items-center justify-center bg-dusty-50 shadow-[0_0_20px_rgba(116,154,192,0.2)]">
-              <span class="font-cinzel text-lg font-bold text-dusty-800 tracking-wider">N & A</span>
+            <div class="w-12 h-12 rounded-full border border-dusty-400 flex items-center justify-center bg-dusty-50 shadow-[0_0_15px_rgba(116,154,192,0.2)]">
+              <span class="font-cinzel text-base font-bold text-dusty-800 tracking-wider">N & A</span>
             </div>
 
-            <div class="my-2">
+            <div>
               <h2 class="font-serif text-2xl sm:text-3xl font-bold tracking-wide text-dusty-950 leading-tight">
                 Natasha & Adrian
               </h2>
-              <p class="text-[11px] font-sans tracking-widest text-dusty-600 uppercase mt-1 font-medium">
+              <p class="text-[10px] font-sans tracking-widest text-dusty-600 uppercase mt-0.5 font-medium">
                 Sabtu, 24 Oktober 2026 &bull; Jakarta
               </p>
             </div>
 
-            <!-- Recipient Personalization on Letter -->
-            <div class="w-full p-2.5 rounded-xl bg-dusty-50/90 border border-dusty-200 shadow-sm">
-              <p class="text-[10px] text-dusty-600 uppercase tracking-wider">Kepada Yth. Bapak/Ibu/Saudara/i:</p>
-              <h4 id="guest-name-cover" class="font-serif text-base sm:text-lg font-bold text-dusty-950 tracking-wide mt-0.5">
-                Tamu Undangan
-              </h4>
-            </div>
-
-            <p class="text-[10px] text-champagne-500 font-serif italic font-medium">
+            <div class="w-full pt-2 border-t border-dusty-200 text-[10px] text-champagne-500 font-serif italic font-medium">
               “Dan kami jadikan kamu berpasang-pasangan.”
-            </p>
-          </div>
-
-          <!-- Left and Right Envelope Flap Folds (3D Depth) -->
-          <div class="envelope-pocket-left"></div>
-          <div class="envelope-pocket-right"></div>
-          <div class="envelope-pocket-bottom"></div>
-
-          <!-- Top Fold Triangular Flap -->
-          <div id="envelope-flap" class="envelope-flap-top">
-            <div class="absolute top-2 left-1/2 -translate-x-1/2 w-8 h-8 opacity-40">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" class="w-full h-full text-dusty-600">
-                <path d="M12 2L15 8L21 9L17 14L18 20L12 17L6 20L7 14L3 9L9 8L12 2Z" fill="rgba(85,123,163,0.15)"/>
-              </svg>
             </div>
           </div>
 
-          <!-- 3D EMBOSSED CHAMPAGNE GOLD WAX SEAL BUTTON -->
+          <!-- 4. Front Pocket (Holds card, displays Recipient Name) -->
+          <div class="envelope-front-pocket">
+            <p class="text-[10px] text-dusty-600 uppercase tracking-widest font-sans font-medium">Kepada Yth. Bapak/Ibu/Saudara/i:</p>
+            <h4 id="guest-name-cover" class="font-serif text-lg sm:text-xl font-bold text-dusty-950 tracking-wide mt-0.5">
+              Tamu Undangan
+            </h4>
+          </div>
+
+          <!-- 5. Top Folding Triangular Flap -->
+          <div id="envelope-flap" class="envelope-flap-top"></div>
+
+          <!-- 6. 3D Embossed Champagne Gold Wax Seal -->
           <button id="btn-wax-seal" type="button" class="wax-seal-btn" title="Ketuk untuk memecahkan segel & membuka undangan" aria-label="Buka Undangan">
             <div class="wax-seal-inner">
-              <svg class="w-3.5 h-3.5 text-amber-900 mb-0.5 opacity-80" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 2l2.4 7.4h7.6l-6.2 4.5 2.4 7.4-6.2-4.5-6.2 4.5 2.4-7.4-6.2-4.5h7.6z"/>
-              </svg>
-              <span class="font-cinzel text-xs font-bold tracking-tighter text-amber-950">N&A</span>
+              <span class="font-cinzel text-xs font-bold tracking-tight text-amber-950">N&A</span>
             </div>
           </button>
 
           <!-- Golden Particle Spark Container -->
-          <div id="wax-sparks-container" class="absolute inset-0 pointer-events-none z-20"></div>
+          <div id="wax-sparks-container" class="absolute inset-0 pointer-events-none z-30"></div>
 
         </div>
       </div>

@@ -186,106 +186,113 @@
 }
 
 /* ========================================================================= */
-/* 1. INTERACTIVE 3D WAX SEAL & ENVELOPE UNBOXING */
+/* 1. INTERACTIVE 3D WAX SEAL & ENVELOPE UNBOXING (REALISTIC STATIONERY) */
 /* ========================================================================= */
 
 .envelope-3d-stage {
-  perspective: 1400px;
-  transform-style: preserve-3d;
+  perspective: 1200px;
 }
 
 .envelope-wrapper {
   position: relative;
   width: 100%;
-  max-width: 440px;
-  height: 380px;
+  max-width: 420px;
+  height: 275px;
   margin: 0 auto;
   transform-style: preserve-3d;
-  transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-/* Base envelope background pocket */
+/* 1. Back of envelope */
 .envelope-back {
   position: absolute;
   inset: 0;
-  border-radius: 24px;
-  background: linear-gradient(145deg, #09132c, #050a18);
-  border: 1.5px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.8), 0 0 40px rgba(7, 15, 38, 0.8);
+  border-radius: 18px;
+  background: linear-gradient(145deg, #091430, #040814);
+  border: 1.5px solid rgba(255, 255, 255, 0.22);
+  box-shadow: 0 25px 60px -10px rgba(0, 0, 0, 0.85);
   z-index: 1;
 }
 
-/* The luxury invitation letter inside */
+/* Interior luxury liner */
+.envelope-liner {
+  position: absolute;
+  top: 8px;
+  left: 10px;
+  right: 10px;
+  height: 180px;
+  background: radial-gradient(circle at 50% 30%, rgba(212, 175, 55, 0.15), transparent 70%),
+              linear-gradient(180deg, #0d1b3e, #070f26);
+  border-radius: 12px;
+  border: 1px dashed rgba(212, 175, 55, 0.35);
+  z-index: 2;
+}
+
+/* 2. The Royal Invitation card nestled inside */
 .envelope-card {
   position: absolute;
-  left: 14px;
-  right: 14px;
-  bottom: 12px;
-  top: 14px;
-  border-radius: 20px;
-  background: linear-gradient(170deg, rgba(13, 27, 62, 0.98), rgba(6, 12, 28, 0.99));
-  border: 1.5px solid rgba(255, 255, 255, 0.35);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), inset 0 0 20px rgba(255, 255, 255, 0.05);
-  z-index: 2;
-  transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1) 0.5s, box-shadow 0.8s;
+  left: 16px;
+  right: 16px;
+  bottom: 10px;
+  height: 245px;
+  border-radius: 14px;
+  background: linear-gradient(170deg, #0f2048 0%, #060d22 100%);
+  border: 1.5px solid rgba(212, 175, 55, 0.5);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7);
+  z-index: 3;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  text-align: center;
+  color: #ffffff;
+  transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.4s;
   will-change: transform;
 }
 
 /* When envelope is opened: card slides up gracefully */
 .envelope-wrapper.is-open .envelope-card {
   transform: translateY(-135px);
-  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.9), 0 0 35px rgba(255, 255, 255, 0.2);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.9), 0 0 30px rgba(212, 175, 55, 0.25);
 }
 
-/* Lower front triangular flaps */
-.envelope-pocket-bottom {
+/* 3. Front pocket (opaque pocket holding the card) */
+.envelope-front-pocket {
   position: absolute;
-  inset: 0;
-  border-radius: 24px;
-  clip-path: polygon(0% 100%, 50% 48%, 100% 100%);
-  background: linear-gradient(0deg, #060b1b 0%, #0d1a3a 100%);
-  border-bottom: 2px solid rgba(255, 255, 255, 0.22);
-  z-index: 4;
-  pointer-events: none;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 175px;
+  border-radius: 0 0 18px 18px;
+  background: linear-gradient(0deg, #070f26 0%, #0c1a38 100%);
+  border: 1.5px solid rgba(255, 255, 255, 0.22);
+  border-top: none;
+  /* V-shaped dip at top of front pocket */
+  clip-path: polygon(0% 0%, 50% 35px, 100% 0%, 100% 100%, 0% 100%);
+  box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.5);
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding-bottom: 22px;
 }
 
-.envelope-pocket-left {
-  position: absolute;
-  inset: 0;
-  border-radius: 24px;
-  clip-path: polygon(0% 0%, 0% 100%, 50% 55%);
-  background: linear-gradient(90deg, #081229 0%, #0a1734 100%);
-  z-index: 3;
-  pointer-events: none;
-  opacity: 0.92;
-}
-
-.envelope-pocket-right {
-  position: absolute;
-  inset: 0;
-  border-radius: 24px;
-  clip-path: polygon(100% 0%, 100% 100%, 50% 55%);
-  background: linear-gradient(270deg, #081229 0%, #0a1734 100%);
-  z-index: 3;
-  pointer-events: none;
-  opacity: 0.92;
-}
-
-/* Top Triangular Flap (Folds Open in 3D) */
+/* 4. Top Folding Triangular Flap */
 .envelope-flap-top {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  height: 52%;
+  height: 145px;
   transform-origin: top center;
   transform-style: preserve-3d;
   clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
-  background: linear-gradient(180deg, #10214a 0%, #081228 100%);
+  background: linear-gradient(180deg, #122452 0%, #0a1736 100%);
   border-top: 1.5px solid rgba(255, 255, 255, 0.35);
-  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.6);
-  z-index: 5;
-  transition: transform 0.85s cubic-bezier(0.4, 0, 0.2, 1), z-index 0.01s 0.4s;
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.55);
+  z-index: 6;
+  transition: transform 0.85s cubic-bezier(0.4, 0, 0.2, 1), z-index 0.01s 0.42s;
   will-change: transform;
 }
 
@@ -295,14 +302,14 @@
   z-index: 1;
 }
 
-/* Realistic 3D Embossed Gold Wax Seal */
+/* 5. Realistic 3D Embossed Gold Wax Seal */
 .wax-seal-btn {
   position: absolute;
-  top: 50%;
+  top: 135px;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 76px;
-  height: 76px;
+  width: 72px;
+  height: 72px;
   border-radius: 50%;
   background: radial-gradient(circle at 35% 32%, #fff2b2 0%, #f3c250 25%, #cb9726 55%, #8f600d 85%, #593902 100%);
   box-shadow:
@@ -313,9 +320,9 @@
   border: 1.5px solid rgba(255, 245, 180, 0.7);
   cursor: pointer;
   z-index: 10;
-  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s, opacity 0.3s;
   display: flex;
-  items-center;
+  align-items: center;
   justify-content: center;
 }
 
@@ -332,10 +339,9 @@
   transform: translate(-50%, -50%) scale(0.96);
 }
 
-/* Inner rim and monogram ring */
 .wax-seal-inner {
-  width: 58px;
-  height: 58px;
+  width: 54px;
+  height: 54px;
   border-radius: 50%;
   border: 1.8px dashed rgba(255, 245, 195, 0.85);
   box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.45);
@@ -344,6 +350,12 @@
   align-items: center;
   justify-content: center;
   background: radial-gradient(circle at 40% 40%, rgba(255, 255, 255, 0.15), transparent 70%);
+}
+
+.envelope-wrapper.is-open .wax-seal-btn {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.25);
+  pointer-events: none;
 }
 
 /* Wax seal crack animation state */
