@@ -125,6 +125,18 @@ function initGuestName() {
   if (rsvpNameInput && guestName !== "Tamu Undangan") {
     rsvpNameInput.value = decodeURIComponent(guestName);
   }
+
+  if (urlParams.get("opened") === "true") {
+    const cover = document.getElementById("opening-cover");
+    if (cover) cover.style.display = "none";
+  }
+
+  if (urlParams.get("scroll")) {
+    setTimeout(() => {
+      const target = document.getElementById(urlParams.get("scroll"));
+      if (target) target.scrollIntoView();
+    }, 200);
+  }
 }
 
 // =============================================================================
