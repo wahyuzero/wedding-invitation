@@ -540,7 +540,7 @@ function initSnowfall() {
   }, { passive: true });
 
   const flakes = [];
-  const flakeCount = Math.min(Math.floor(width * 0.08), 85);
+  const flakeCount = Math.max(50, Math.min(Math.floor(width * 0.1), 115));
 
   class Snowflake {
     constructor(initial = false) {
@@ -551,36 +551,36 @@ function initSnowfall() {
       this.x = Math.random() * width;
       this.y = initial ? Math.random() * height : -15;
       
-      // Determine depth layer: 0 (background fine), 1 (midground soft), 2 (foreground bokeh)
+      // Determine depth layer: 0 (background fine), 1 (midground crisp), 2 (foreground bokeh)
       const layerRand = Math.random();
-      if (layerRand < 0.65) {
-        // Background fine powder (65%)
+      if (layerRand < 0.60) {
+        // Background fine flakes (60%)
         this.layer = 0;
-        this.radius = Math.random() * 1.2 + 0.8;
-        this.speedY = Math.random() * 0.45 + 0.35;
-        this.opacity = Math.random() * 0.35 + 0.25;
-        this.swayRadius = Math.random() * 0.8 + 0.4;
-        this.swaySpeed = Math.random() * 0.015 + 0.008;
-      } else if (layerRand < 0.90) {
-        // Midground soft crystal (25%)
+        this.radius = Math.random() * 1.5 + 1.2;
+        this.speedY = Math.random() * 0.45 + 0.45;
+        this.opacity = Math.random() * 0.25 + 0.60; // Clearly visible
+        this.swayRadius = Math.random() * 0.9 + 0.5;
+        this.swaySpeed = Math.random() * 0.018 + 0.01;
+      } else if (layerRand < 0.88) {
+        // Midground crisp crystals (28%)
         this.layer = 1;
-        this.radius = Math.random() * 1.8 + 1.8;
-        this.speedY = Math.random() * 0.55 + 0.65;
-        this.opacity = Math.random() * 0.45 + 0.4;
-        this.swayRadius = Math.random() * 1.2 + 0.8;
-        this.swaySpeed = Math.random() * 0.02 + 0.012;
+        this.radius = Math.random() * 2.2 + 2.2;
+        this.speedY = Math.random() * 0.6 + 0.75;
+        this.opacity = Math.random() * 0.2 + 0.78; // High contrast
+        this.swayRadius = Math.random() * 1.4 + 0.9;
+        this.swaySpeed = Math.random() * 0.022 + 0.012;
       } else {
-        // Foreground soft bokeh orb (10%)
+        // Foreground soft bokeh orbs (12%)
         this.layer = 2;
-        this.radius = Math.random() * 3.5 + 4.2;
-        this.speedY = Math.random() * 0.6 + 1.0;
-        this.opacity = Math.random() * 0.22 + 0.15; // Soft and dreamy
-        this.swayRadius = Math.random() * 2.0 + 1.2;
-        this.swaySpeed = Math.random() * 0.025 + 0.015;
+        this.radius = Math.random() * 4.5 + 5.0;
+        this.speedY = Math.random() * 0.7 + 1.1;
+        this.opacity = Math.random() * 0.25 + 0.42; // Soft dreamy glow
+        this.swayRadius = Math.random() * 2.2 + 1.3;
+        this.swaySpeed = Math.random() * 0.028 + 0.015;
       }
 
       this.swayAngle = Math.random() * Math.PI * 2;
-      this.color = Math.random() > 0.3 ? "255, 255, 255" : "220, 235, 248";
+      this.color = Math.random() > 0.25 ? "255, 255, 255" : "228, 241, 252";
     }
 
     update() {
@@ -589,11 +589,11 @@ function initSnowfall() {
       this.y += this.speedY;
 
       // Wrap around horizontally
-      if (this.x < -20) this.x = width + 20;
-      if (this.x > width + 20) this.x = -20;
+      if (this.x < -25) this.x = width + 25;
+      if (this.x > width + 25) this.x = -25;
 
       // Reset when falling beyond screen
-      if (this.y > height + 20) {
+      if (this.y > height + 25) {
         this.reset(false);
       }
     }
@@ -601,18 +601,20 @@ function initSnowfall() {
     draw() {
       ctx.beginPath();
       if (this.layer === 2) {
-        // Ethereal Bokeh Radial Gradient
+        // Ethereal Bokeh Radial Gradient with luminous soft edge
         const grad = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.radius);
-        grad.addColorStop(0, `rgba(${this.color}, ${this.opacity * 1.2})`);
-        grad.addColorStop(0.5, `rgba(${this.color}, ${this.opacity * 0.6})`);
+        grad.addColorStop(0, `rgba(${this.color}, ${Math.min(this.opacity * 1.4, 0.9)})`);
+        grad.addColorStop(0.35, `rgba(${this.color}, ${this.opacity * 0.85})`);
+        grad.addColorStop(0.75, `rgba(180, 210, 235, ${this.opacity * 0.45})`);
         grad.addColorStop(1, `rgba(${this.color}, 0)`);
         ctx.fillStyle = grad;
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
         ctx.fill();
       } else {
+        // Soft dusty blue contrast shadow gives crisp definition over light background
+        ctx.shadowBlur = this.layer === 1 ? 6 : 3;
+        ctx.shadowColor = "rgba(61, 92, 128, 0.35)";
         ctx.fillStyle = `rgba(${this.color}, ${this.opacity})`;
-        ctx.shadowBlur = this.layer === 1 ? 5 : 2;
-        ctx.shadowColor = "#ffffff";
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
         ctx.fill();
       }
