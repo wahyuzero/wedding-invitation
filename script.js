@@ -8,31 +8,49 @@ let isAudioPlaying = false;
 let audioContext = null;
 let audioInterval = null;
 let currentLightboxIndex = 1;
+let isOpeningCover = false;
 
-// 4 Gallery Photos
+// Voice note states
+let isVoicePlaying = false;
+let voiceInterval = null;
+let voiceSeconds = 0;
+let voiceSynthTimer = null;
+
+// 5 Curated Editorial Gallery Photos
 const galleryData = [
   {
     id: 1,
-    title: "The Royal Portrait",
-    desc: "Momen keanggunan busana adat bernuansa Navy & Pure White.",
-    icon: `<svg class="w-20 h-20 text-white mb-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>`
+    title: "The Celestial Union",
+    desc: "Keanggunan busana adat Nusantara bernuansa Midnight Navy & Pure White dalam balutan estetika editorial modern.",
+    badge: "Vogue Wedding Vol. 24",
+    icon: `<svg class="w-20 h-20 text-white mb-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>`
   },
   {
     id: 2,
     title: "Warm Sunset Embrace",
-    desc: "Hangatnya mentari sore menjadi saksi tawa dan cinta kami.",
-    icon: `<svg class="w-20 h-20 text-white mb-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>`
+    desc: "Tawa lepas di kala senja di Pantai Seminyak, Bali. Menjadi saksi awal perjalanan yang saling melengkapi.",
+    badge: "Polaroid Snapshot 2022",
+    icon: `<svg class="w-20 h-20 text-amber-100 mb-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>`
   },
   {
     id: 3,
-    title: "Precious Promise",
-    desc: "Cincin pertunangan sebagai simbol komitmen selamanya.",
-    icon: `<svg class="w-20 h-20 text-white mb-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`
+    title: "Stardust Vows Under The Sky",
+    desc: "Di bawah lautan gemintang Penanjakan Bromo pada pukul 05.15 WIB, dinginnya embun menjadi saksi kehangatan ikrar kami.",
+    badge: "Bromo Expedition 2025",
+    icon: `<svg class="w-20 h-20 text-blue-200 mb-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>`
   },
   {
     id: 4,
+    title: "The Solitaire Ring Promise",
+    desc: "Cincin pertunangan bertahtakan permata sebagai lambang ketulusan dan janji seumur hidup.",
+    badge: "Sacred Ring Macro",
+    icon: `<svg class="w-20 h-20 text-amber-200 mb-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="7"/><circle cx="12" cy="7" r="2" fill="currentColor"/></svg>`
+  },
+  {
+    id: 5,
     title: "Eternal Symphony",
-    desc: "Menatap masa depan bersama dengan penuh harapan dan doa.",
+    desc: "Menatap masa depan bersama dengan penuh harapan, doa restu, dan keyakinan akan berkah-Nya.",
+    badge: "Jakarta Pre-Wedding 2026",
     icon: `<svg class="w-20 h-20 text-white mb-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`
   }
 ];
@@ -85,6 +103,9 @@ document.addEventListener("DOMContentLoaded", () => {
   initWishes();
   initScrollSpy();
   initRevealOnScroll();
+  initEnvelopeUnboxing();
+  initVoiceNotePlayer();
+  init3DCardTilt();
   initEvents();
 });
 
@@ -107,25 +128,280 @@ function initGuestName() {
 }
 
 // =============================================================================
-// 2. OPENING COVER & AUDIO SYSTEM (Web Audio API Synthesizer)
+// 2. INTERACTIVE 3D WAX SEAL & ENVELOPE UNBOXING
 // =============================================================================
-function initEvents() {
+function initEnvelopeUnboxing() {
+  const btnSeal = document.getElementById("btn-wax-seal");
   const btnOpen = document.getElementById("btn-open-invitation");
-  const cover = document.getElementById("opening-cover");
-  const audioToggle = document.getElementById("btn-audio-toggle");
+
+  if (btnSeal) {
+    btnSeal.addEventListener("click", () => {
+      openWeddingInvitation();
+    });
+  }
 
   if (btnOpen) {
     btnOpen.addEventListener("click", () => {
-      cover.style.opacity = "0";
-      cover.style.transform = "translateY(-100%)";
-      setTimeout(() => {
-        cover.style.display = "none";
-      }, 1000);
-
-      startRomanticAudio();
-      showToast("Selamat datang di undangan kami! ✨");
+      openWeddingInvitation();
     });
   }
+}
+
+function playWaxCrackAudio() {
+  try {
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    if (!AudioCtx) return;
+    if (!audioContext) audioContext = new AudioCtx();
+    if (audioContext.state === "suspended") audioContext.resume();
+
+    const now = audioContext.currentTime;
+
+    // 1. Crisp pop/seal crack impulse
+    const osc1 = audioContext.createOscillator();
+    const gain1 = audioContext.createGain();
+    osc1.type = "sawtooth";
+    osc1.frequency.setValueAtTime(320, now);
+    osc1.frequency.exponentialRampToValueAtTime(70, now + 0.08);
+    gain1.gain.setValueAtTime(0.18, now);
+    gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.09);
+    osc1.connect(gain1);
+    gain1.connect(audioContext.destination);
+    osc1.start(now);
+    osc1.stop(now + 0.1);
+
+    // 2. Ascending golden chime sparkle
+    const notes = [659.25, 880, 1108.73, 1318.51];
+    notes.forEach((freq, idx) => {
+      const chimeOsc = audioContext.createOscillator();
+      const chimeGain = audioContext.createGain();
+      chimeOsc.type = "sine";
+      chimeOsc.frequency.setValueAtTime(freq, now + 0.08 + (idx * 0.06));
+      chimeGain.gain.setValueAtTime(0.001, now + 0.08 + (idx * 0.06));
+      chimeGain.gain.exponentialRampToValueAtTime(0.07, now + 0.1 + (idx * 0.06));
+      chimeGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.8 + (idx * 0.06));
+      chimeOsc.connect(chimeGain);
+      chimeGain.connect(audioContext.destination);
+      chimeOsc.start(now + 0.08 + (idx * 0.06));
+      chimeOsc.stop(now + 0.9 + (idx * 0.06));
+    });
+  } catch (err) {
+    console.warn("Wax sound notice:", err);
+  }
+}
+
+function createWaxSparks() {
+  const container = document.getElementById("wax-sparks-container");
+  if (!container) return;
+
+  const sparkCount = 20;
+  for (let i = 0; i < sparkCount; i++) {
+    const spark = document.createElement("div");
+    const angle = (Math.PI * 2 * i) / sparkCount + (Math.random() * 0.3 - 0.15);
+    const distance = Math.random() * 90 + 40;
+    const duration = Math.random() * 0.4 + 0.5;
+    const size = Math.random() * 5 + 3;
+
+    spark.style.cssText = `
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: ${size}px;
+      height: ${size}px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #fff7cc 0%, #ffd43b 60%, #e67700 100%);
+      box-shadow: 0 0 10px #ffd43b;
+      transform: translate(-50%, -50%);
+      transition: transform ${duration}s cubic-bezier(0.1, 0.9, 0.2, 1), opacity ${duration}s ease-out;
+      pointer-events: none;
+      z-index: 30;
+      opacity: 1;
+    `;
+    container.appendChild(spark);
+
+    requestAnimationFrame(() => {
+      const destX = Math.cos(angle) * distance;
+      const destY = Math.sin(angle) * distance;
+      spark.style.transform = `translate(calc(-50% + ${destX}px), calc(-50% + ${destY}px)) scale(0)`;
+      spark.style.opacity = "0";
+    });
+
+    setTimeout(() => {
+      if (spark.parentNode) spark.parentNode.removeChild(spark);
+    }, duration * 1000 + 100);
+  }
+}
+
+function openWeddingInvitation() {
+  if (isOpeningCover) return;
+  isOpeningCover = true;
+
+  playWaxCrackAudio();
+  createWaxSparks();
+
+  const sealBtn = document.getElementById("btn-wax-seal");
+  const envelope = document.getElementById("envelope-wrapper");
+  const cover = document.getElementById("opening-cover");
+
+  if (sealBtn) sealBtn.classList.add("is-cracking");
+  if (envelope) envelope.classList.add("is-open");
+
+  startRomanticAudio();
+
+  setTimeout(() => {
+    if (cover) {
+      cover.style.transition = "opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1), filter 0.9s ease";
+      cover.style.opacity = "0";
+      cover.style.transform = "translateY(-100%) scale(1.05)";
+      cover.style.filter = "blur(10px)";
+    }
+    showToast("Selamat datang di pernikahan Adrian & Natasha! ✨");
+  }, 1250);
+
+  setTimeout(() => {
+    if (cover) cover.style.display = "none";
+  }, 2200);
+}
+
+// =============================================================================
+// 2.5. BESPOKE VOICE NOTE GREETING PLAYER
+// =============================================================================
+function initVoiceNotePlayer() {
+  const btnVoice = document.getElementById("btn-voice-note");
+  const iconPlay = document.getElementById("icon-voice-play");
+  const iconPause = document.getElementById("icon-voice-pause");
+  const timerCurrent = document.getElementById("voice-timer-current");
+  const waveBars = document.querySelectorAll(".wave-bar");
+
+  if (!btnVoice) return;
+
+  btnVoice.addEventListener("click", () => {
+    if (isVoicePlaying) {
+      stopVoiceNote();
+      showToast("Pesan suara dijeda ⏸️");
+    } else {
+      startVoiceNote();
+      showToast("Memutar pesan suara mempelai 🎙️");
+    }
+  });
+
+  function startVoiceNote() {
+    isVoicePlaying = true;
+    if (iconPlay) iconPlay.classList.add("hidden");
+    if (iconPause) iconPause.classList.remove("hidden");
+    waveBars.forEach((bar) => bar.classList.add("playing"));
+
+    playVoiceSynthesizer();
+
+    if (voiceInterval) clearInterval(voiceInterval);
+    voiceInterval = setInterval(() => {
+      voiceSeconds++;
+      if (timerCurrent) {
+        const secStr = String(voiceSeconds % 60).padStart(2, "0");
+        timerCurrent.textContent = `00:${secStr}`;
+      }
+
+      // Randomize bar heights dynamically for live equalizer effect
+      waveBars.forEach((bar) => {
+        const h = Math.floor(Math.random() * 22) + 6;
+        bar.style.height = `${h}px`;
+      });
+
+      if (voiceSeconds >= 24) {
+        stopVoiceNote();
+        voiceSeconds = 0;
+        if (timerCurrent) timerCurrent.textContent = "00:00";
+      }
+    }, 1000);
+  }
+
+  function stopVoiceNote() {
+    isVoicePlaying = false;
+    if (iconPlay) iconPlay.classList.remove("hidden");
+    if (iconPause) iconPause.classList.add("hidden");
+    waveBars.forEach((bar) => {
+      bar.classList.remove("playing");
+      bar.style.height = "";
+    });
+
+    if (voiceInterval) {
+      clearInterval(voiceInterval);
+      voiceInterval = null;
+    }
+    if (voiceSynthTimer) {
+      clearInterval(voiceSynthTimer);
+      voiceSynthTimer = null;
+    }
+  }
+
+  function playVoiceSynthesizer() {
+    try {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (!AudioCtx) return;
+      if (!audioContext) audioContext = new AudioCtx();
+      if (audioContext.state === "suspended") audioContext.resume();
+
+      const melody = [329.63, 392.00, 493.88, 587.33, 493.88, 392.00];
+      let noteIdx = 0;
+
+      function playNote() {
+        if (!isVoicePlaying || !audioContext) return;
+        const now = audioContext.currentTime;
+        const osc = audioContext.createOscillator();
+        const gain = audioContext.createGain();
+
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(melody[noteIdx % melody.length], now);
+        noteIdx++;
+
+        gain.gain.setValueAtTime(0.001, now);
+        gain.gain.exponentialRampToValueAtTime(0.045, now + 0.1);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 1.2);
+
+        osc.connect(gain);
+        gain.connect(audioContext.destination);
+
+        osc.start(now);
+        osc.stop(now + 1.3);
+      }
+
+      playNote();
+      if (voiceSynthTimer) clearInterval(voiceSynthTimer);
+      voiceSynthTimer = setInterval(playNote, 1400);
+    } catch (e) {
+      console.warn("Voice synth error:", e);
+    }
+  }
+}
+
+// =============================================================================
+// 2.6. EDITORIAL 3D CARD TILT EFFECT
+// =============================================================================
+function init3DCardTilt() {
+  const cards = document.querySelectorAll(".tilt-card");
+  cards.forEach((card) => {
+    card.addEventListener("mousemove", (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      const rotateX = ((y - centerY) / centerY) * -7;
+      const rotateY = ((x - centerX) / centerX) * 7;
+
+      card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+    });
+
+    card.addEventListener("mouseleave", () => {
+      card.style.transform = "perspective(800px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)";
+    });
+  });
+}
+
+// =============================================================================
+// 2.7. AUDIO TOGGLE EVENT
+// =============================================================================
+function initEvents() {
+  const audioToggle = document.getElementById("btn-audio-toggle");
 
   if (audioToggle) {
     audioToggle.addEventListener("click", () => {
@@ -560,8 +836,9 @@ function updateLightboxContent() {
   if (placeholderEl) {
     placeholderEl.innerHTML = `
       ${item.icon}
+      ${item.badge ? `<span class="inline-block px-3 py-0.5 rounded-full bg-white/10 text-amber-200 text-[10px] font-cinzel uppercase tracking-widest mb-2 border border-white/20">${item.badge}</span>` : ''}
       <h4 class="font-serif text-2xl text-white font-bold">${item.title}</h4>
-      <p class="text-xs text-slate-200 mt-2 font-normal">${item.desc}</p>
+      <p class="text-xs text-slate-200 mt-2 font-normal max-w-md mx-auto">${item.desc}</p>
     `;
   }
 }

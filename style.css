@@ -184,3 +184,305 @@
   opacity: 1;
   transform: translateY(0);
 }
+
+/* ========================================================================= */
+/* 1. INTERACTIVE 3D WAX SEAL & ENVELOPE UNBOXING */
+/* ========================================================================= */
+
+.envelope-3d-stage {
+  perspective: 1400px;
+  transform-style: preserve-3d;
+}
+
+.envelope-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 440px;
+  height: 380px;
+  margin: 0 auto;
+  transform-style: preserve-3d;
+  transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* Base envelope background pocket */
+.envelope-back {
+  position: absolute;
+  inset: 0;
+  border-radius: 24px;
+  background: linear-gradient(145deg, #09132c, #050a18);
+  border: 1.5px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.8), 0 0 40px rgba(7, 15, 38, 0.8);
+  z-index: 1;
+}
+
+/* The luxury invitation letter inside */
+.envelope-card {
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: 12px;
+  top: 14px;
+  border-radius: 20px;
+  background: linear-gradient(170deg, rgba(13, 27, 62, 0.98), rgba(6, 12, 28, 0.99));
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), inset 0 0 20px rgba(255, 255, 255, 0.05);
+  z-index: 2;
+  transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1) 0.5s, box-shadow 0.8s;
+  will-change: transform;
+}
+
+/* When envelope is opened: card slides up gracefully */
+.envelope-wrapper.is-open .envelope-card {
+  transform: translateY(-135px);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.9), 0 0 35px rgba(255, 255, 255, 0.2);
+}
+
+/* Lower front triangular flaps */
+.envelope-pocket-bottom {
+  position: absolute;
+  inset: 0;
+  border-radius: 24px;
+  clip-path: polygon(0% 100%, 50% 48%, 100% 100%);
+  background: linear-gradient(0deg, #060b1b 0%, #0d1a3a 100%);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.22);
+  z-index: 4;
+  pointer-events: none;
+}
+
+.envelope-pocket-left {
+  position: absolute;
+  inset: 0;
+  border-radius: 24px;
+  clip-path: polygon(0% 0%, 0% 100%, 50% 55%);
+  background: linear-gradient(90deg, #081229 0%, #0a1734 100%);
+  z-index: 3;
+  pointer-events: none;
+  opacity: 0.92;
+}
+
+.envelope-pocket-right {
+  position: absolute;
+  inset: 0;
+  border-radius: 24px;
+  clip-path: polygon(100% 0%, 100% 100%, 50% 55%);
+  background: linear-gradient(270deg, #081229 0%, #0a1734 100%);
+  z-index: 3;
+  pointer-events: none;
+  opacity: 0.92;
+}
+
+/* Top Triangular Flap (Folds Open in 3D) */
+.envelope-flap-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 52%;
+  transform-origin: top center;
+  transform-style: preserve-3d;
+  clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
+  background: linear-gradient(180deg, #10214a 0%, #081228 100%);
+  border-top: 1.5px solid rgba(255, 255, 255, 0.35);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.6);
+  z-index: 5;
+  transition: transform 0.85s cubic-bezier(0.4, 0, 0.2, 1), z-index 0.01s 0.4s;
+  will-change: transform;
+}
+
+/* Flap rotated backwards upon unboxing */
+.envelope-wrapper.is-open .envelope-flap-top {
+  transform: rotateX(180deg);
+  z-index: 1;
+}
+
+/* Realistic 3D Embossed Gold Wax Seal */
+.wax-seal-btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 32%, #fff2b2 0%, #f3c250 25%, #cb9726 55%, #8f600d 85%, #593902 100%);
+  box-shadow:
+    0 10px 25px -4px rgba(0, 0, 0, 0.8),
+    0 0 25px rgba(243, 194, 80, 0.5),
+    inset 0 2px 4px rgba(255, 255, 255, 0.8),
+    inset 0 -3px 6px rgba(0, 0, 0, 0.5);
+  border: 1.5px solid rgba(255, 245, 180, 0.7);
+  cursor: pointer;
+  z-index: 10;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s;
+  display: flex;
+  items-center;
+  justify-content: center;
+}
+
+.wax-seal-btn:hover {
+  transform: translate(-50%, -50%) scale(1.08);
+  box-shadow:
+    0 15px 35px -4px rgba(0, 0, 0, 0.9),
+    0 0 35px rgba(243, 194, 80, 0.85),
+    inset 0 2px 5px rgba(255, 255, 255, 0.9),
+    inset 0 -3px 6px rgba(0, 0, 0, 0.5);
+}
+
+.wax-seal-btn:active {
+  transform: translate(-50%, -50%) scale(0.96);
+}
+
+/* Inner rim and monogram ring */
+.wax-seal-inner {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  border: 1.8px dashed rgba(255, 245, 195, 0.85);
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.45);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at 40% 40%, rgba(255, 255, 255, 0.15), transparent 70%);
+}
+
+/* Wax seal crack animation state */
+.wax-seal-btn.is-cracking {
+  animation: waxCrackBreak 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  pointer-events: none;
+}
+
+@keyframes waxCrackBreak {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    filter: brightness(1.2);
+  }
+  30% {
+    transform: translate(-50%, -50%) scale(1.18) rotate(3deg);
+    filter: brightness(1.6);
+  }
+  60% {
+    transform: translate(-50%, -50%) scale(0.9) rotate(-3deg);
+    opacity: 0.9;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(0.3);
+    opacity: 0;
+  }
+}
+
+/* Metallic gold shimmer sheen on letter */
+.gold-shimmer-text {
+  background: linear-gradient(135deg, #ffffff 0%, #fff2b2 40%, #e2b755 70%, #ffffff 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmerWhite 4s linear infinite;
+}
+
+/* ========================================================================= */
+/* 2. OUR LOVE STORY SCROLLYTELLING TIMELINE */
+/* ========================================================================= */
+
+.story-timeline-stem {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 20px;
+  width: 2px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.8) 30%, rgba(147, 197, 253, 0.8) 70%, rgba(255, 255, 255, 0.1) 100%);
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.4);
+}
+
+@media (min-width: 640px) {
+  .story-timeline-stem {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
+.story-node-glow {
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.7), 0 0 35px rgba(147, 197, 253, 0.4);
+}
+
+/* ========================================================================= */
+/* 3. EDITORIAL BENTO GRID & POLAROID CARD */
+/* ========================================================================= */
+
+.tilt-card {
+  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.4s ease;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.polaroid-card {
+  background: #ffffff;
+  color: #0d1b3e;
+  padding: 12px 12px 24px 12px;
+  border-radius: 6px;
+  box-shadow: 0 18px 35px -8px rgba(0, 0, 0, 0.7), 0 0 20px rgba(255, 255, 255, 0.15);
+  transform: rotate(-2.5deg);
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s;
+}
+
+.polaroid-card:hover {
+  transform: rotate(0deg) scale(1.03);
+  box-shadow: 0 24px 45px -10px rgba(0, 0, 0, 0.9), 0 0 30px rgba(255, 255, 255, 0.3);
+}
+
+.washi-tape {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%) rotate(1deg);
+  width: 70px;
+  height: 22px;
+  background: rgba(255, 255, 255, 0.7);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(4px);
+  border-left: 2px dashed rgba(0, 0, 0, 0.15);
+  border-right: 2px dashed rgba(0, 0, 0, 0.15);
+  z-index: 10;
+}
+
+/* Subtle Film Grain Noise Texture */
+.film-grain {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* ========================================================================= */
+/* 4. VOICE NOTE / AUDIO WAVEFORM EQUALIZER */
+/* ========================================================================= */
+
+.wave-bar {
+  display: inline-block;
+  width: 3.5px;
+  border-radius: 9999px;
+  background: linear-gradient(180deg, #ffffff 0%, #93c5fd 100%);
+  transition: height 0.15s ease;
+  height: 8px;
+}
+
+.wave-bar.playing {
+  animation: waveJump 1s ease-in-out infinite alternate;
+}
+
+@keyframes waveJump {
+  0% {
+    height: 6px;
+  }
+  50% {
+    height: 28px;
+  }
+  100% {
+    height: 12px;
+  }
+}
+
