@@ -98,7 +98,7 @@ let wishesData = [];
 // =============================================================================
 document.addEventListener("DOMContentLoaded", () => {
   initGuestName();
-  initStarfield();
+  initSnowfall();
   initCountdown();
   initWishes();
   initScrollSpy();
@@ -508,9 +508,9 @@ function updateAudioUI(playing) {
 }
 
 // =============================================================================
-// 3. CELESTIAL STARDUST / PASTEL PARTICLES CANVAS
+// 3. ETHEREAL BOKEH SNOWFALL CANVAS (ROMANTIC WINTER EMBRACE)
 // =============================================================================
-function initStarfield() {
+function initSnowfall() {
   const canvas = document.getElementById("starfield");
   if (!canvas) return;
   const ctx = canvas.getContext("2d");
@@ -518,53 +518,130 @@ function initStarfield() {
   let width = (canvas.width = window.innerWidth);
   let height = (canvas.height = window.innerHeight);
 
+  let mouseX = width / 2;
+  let wind = 0;
+  let targetWind = 0;
+
   window.addEventListener("resize", () => {
     width = canvas.width = window.innerWidth;
     height = canvas.height = window.innerHeight;
   });
 
-  const stars = [];
-  const starCount = Math.min(Math.floor(width * 0.08), 85);
+  window.addEventListener("mousemove", (e) => {
+    mouseX = e.clientX;
+    targetWind = (mouseX / width - 0.5) * 0.7;
+  });
 
-  for (let i = 0; i < starCount; i++) {
-    stars.push({
-      x: Math.random() * width,
-      y: Math.random() * height,
-      radius: Math.random() * 1.8 + 0.6,
-      alpha: Math.random() * 0.5 + 0.25,
-      speed: Math.random() * 0.25 + 0.1,
-      twinkleSpeed: Math.random() * 0.02 + 0.005,
-      direction: Math.random() > 0.5 ? 1 : -1
-    });
+  window.addEventListener("touchmove", (e) => {
+    if (e.touches && e.touches.length > 0) {
+      mouseX = e.touches[0].clientX;
+      targetWind = (mouseX / width - 0.5) * 0.7;
+    }
+  }, { passive: true });
+
+  const flakes = [];
+  const flakeCount = Math.min(Math.floor(width * 0.08), 85);
+
+  class Snowflake {
+    constructor(initial = false) {
+      this.reset(initial);
+    }
+
+    reset(initial = false) {
+      this.x = Math.random() * width;
+      this.y = initial ? Math.random() * height : -15;
+      
+      // Determine depth layer: 0 (background fine), 1 (midground soft), 2 (foreground bokeh)
+      const layerRand = Math.random();
+      if (layerRand < 0.65) {
+        // Background fine powder (65%)
+        this.layer = 0;
+        this.radius = Math.random() * 1.2 + 0.8;
+        this.speedY = Math.random() * 0.45 + 0.35;
+        this.opacity = Math.random() * 0.35 + 0.25;
+        this.swayRadius = Math.random() * 0.8 + 0.4;
+        this.swaySpeed = Math.random() * 0.015 + 0.008;
+      } else if (layerRand < 0.90) {
+        // Midground soft crystal (25%)
+        this.layer = 1;
+        this.radius = Math.random() * 1.8 + 1.8;
+        this.speedY = Math.random() * 0.55 + 0.65;
+        this.opacity = Math.random() * 0.45 + 0.4;
+        this.swayRadius = Math.random() * 1.2 + 0.8;
+        this.swaySpeed = Math.random() * 0.02 + 0.012;
+      } else {
+        // Foreground soft bokeh orb (10%)
+        this.layer = 2;
+        this.radius = Math.random() * 3.5 + 4.2;
+        this.speedY = Math.random() * 0.6 + 1.0;
+        this.opacity = Math.random() * 0.22 + 0.15; // Soft and dreamy
+        this.swayRadius = Math.random() * 2.0 + 1.2;
+        this.swaySpeed = Math.random() * 0.025 + 0.015;
+      }
+
+      this.swayAngle = Math.random() * Math.PI * 2;
+      this.color = Math.random() > 0.3 ? "255, 255, 255" : "220, 235, 248";
+    }
+
+    update() {
+      this.swayAngle += this.swaySpeed;
+      this.x += Math.sin(this.swayAngle) * this.swayRadius + wind;
+      this.y += this.speedY;
+
+      // Wrap around horizontally
+      if (this.x < -20) this.x = width + 20;
+      if (this.x > width + 20) this.x = -20;
+
+      // Reset when falling beyond screen
+      if (this.y > height + 20) {
+        this.reset(false);
+      }
+    }
+
+    draw() {
+      ctx.beginPath();
+      if (this.layer === 2) {
+        // Ethereal Bokeh Radial Gradient
+        const grad = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.radius);
+        grad.addColorStop(0, `rgba(${this.color}, ${this.opacity * 1.2})`);
+        grad.addColorStop(0.5, `rgba(${this.color}, ${this.opacity * 0.6})`);
+        grad.addColorStop(1, `rgba(${this.color}, 0)`);
+        ctx.fillStyle = grad;
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fill();
+      } else {
+        ctx.fillStyle = `rgba(${this.color}, ${this.opacity})`;
+        ctx.shadowBlur = this.layer === 1 ? 5 : 2;
+        ctx.shadowColor = "#ffffff";
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+  }
+
+  for (let i = 0; i < flakeCount; i++) {
+    flakes.push(new Snowflake(true));
   }
 
   function animate() {
     ctx.clearRect(0, 0, width, height);
 
-    stars.forEach((star) => {
-      star.alpha += star.twinkleSpeed * star.direction;
-      if (star.alpha > 0.75 || star.alpha < 0.2) {
-        star.direction *= -1;
-      }
+    // Smooth wind transition
+    wind += (targetWind - wind) * 0.03;
 
-      star.y -= star.speed;
-      if (star.y < 0) {
-        star.y = height;
-        star.x = Math.random() * width;
-      }
-
-      ctx.beginPath();
-      ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(116, 154, 192, ${star.alpha})`;
-      ctx.shadowBlur = 4;
-      ctx.shadowColor = "#98b7d5";
-      ctx.fill();
+    flakes.forEach((flake) => {
+      flake.update();
+      flake.draw();
     });
 
     requestAnimationFrame(animate);
   }
 
   animate();
+}
+
+function initStarfield() {
+  initSnowfall();
 }
 
 // =============================================================================
