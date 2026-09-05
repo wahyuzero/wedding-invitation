@@ -385,60 +385,112 @@
   box-shadow: 0 24px 45px -10px rgba(37, 62, 92, 0.35), 0 0 30px rgba(255, 255, 255, 0.7);
 }
 
+/* ========================================================================= */
+/* REALISTIC ADHESIVE TAPE (SKEUOMORPHIC TORN MASKING TAPE ON WALL) */
+/* ========================================================================= */
+
 .washi-tape,
 .vellum-tape {
   position: absolute;
-  top: -11px;
+  top: -14px;
   left: 50%;
-  transform: translateX(-50%) rotate(-1.5deg);
-  width: 86px;
-  height: 24px;
-  background: linear-gradient(175deg, rgba(255, 255, 255, 0.85) 0%, rgba(235, 244, 252, 0.75) 50%, rgba(220, 235, 248, 0.82) 100%);
-  box-shadow: 0 4px 10px -2px rgba(37, 62, 92, 0.16), inset 0 1px 1.5px rgba(255, 255, 255, 0.95), inset 0 -1px 2px rgba(197, 168, 104, 0.35);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
-  border-top: 0.5px solid rgba(255, 255, 255, 0.95);
-  border-bottom: 0.5px solid rgba(197, 168, 104, 0.4);
-  /* Organic jagged torn edges left and right */
-  clip-path: polygon(
-    0% 2px, 3px 0px, 100% 0px, 98% 3px, 100% 7px, 97% 12px, 100% 16px, 98% 21px, 100% 24px,
-    0% 24px, 2% 20px, 0% 15px, 3% 11px, 0% 7px, 2% 4px
-  );
-  z-index: 20;
+  transform: translateX(-50%) rotate(-2deg);
+  /* Filter drop-shadow on wrapper wraps precisely around the clipped torn paper edges */
+  filter: drop-shadow(0 1.5px 2px rgba(25, 45, 75, 0.28))
+          drop-shadow(0 3px 6px rgba(25, 45, 75, 0.12));
+  z-index: 25;
   pointer-events: none;
 }
 
-/* Subtle embedded champagne gold metallic thread inside the tape */
-.washi-tape::after,
-.vellum-tape::after {
+.washi-tape .tape-strip,
+.vellum-tape .tape-strip {
+  width: 110px;
+  height: 28px;
+  /* Realistic semi-translucent crepe masking tape */
+  background-color: rgba(246, 241, 228, 0.78);
+  background-image:
+    /* Micro crepe ridges running across the tape */
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.25) 0px,
+      rgba(255, 255, 255, 0.25) 1px,
+      transparent 1px,
+      transparent 3px
+    ),
+    /* Edge bevel & tension variation */
+    linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.5) 0%,
+      rgba(0, 0, 0, 0.03) 40%,
+      rgba(0, 0, 0, 0.06) 80%,
+      rgba(255, 255, 255, 0.35) 100%
+    ),
+    /* Specular diagonal glare streak */
+    linear-gradient(
+      115deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.35) 38%,
+      rgba(255, 255, 255, 0.75) 46%,
+      transparent 54%,
+      transparent 100%
+    );
+  
+  /* Frosty adhesive contact over wall and card border */
+  backdrop-filter: blur(1.2px);
+  -webkit-backdrop-filter: blur(1.2px);
+
+  /* Irregular hand-torn ripped paper ends */
+  clip-path: polygon(
+    0% 5px, 2px 2px, 0% 0px,
+    97% 1px, 100% 4px, 98% 8px, 100% 12px, 98% 17px, 100% 21px, 98% 25px, 100% 28px,
+    0% 28px, 2% 24px, 0% 20px, 3% 16px, 0% 12px, 2% 8px, 0% 5px
+  );
+  position: relative;
+}
+
+/* Subtle vertical tension crease / thumb smoothing mark */
+.washi-tape .tape-strip::before,
+.vellum-tape .tape-strip::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 28%;
+  width: 1.5px;
+  height: 100%;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.75), rgba(0, 0, 0, 0.08), rgba(255, 255, 255, 0.4));
+  opacity: 0.7;
+}
+
+/* Delicate embedded gold fiber / champagne shimmer line */
+.washi-tape .tape-strip::after,
+.vellum-tape .tape-strip::after {
   content: '';
   position: absolute;
   top: 50%;
-  left: 10px;
-  right: 10px;
+  left: 14px;
+  right: 14px;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(197, 168, 104, 0.55), transparent);
+  background: linear-gradient(90deg, transparent 0%, rgba(197, 168, 104, 0.45) 25%, rgba(255, 245, 200, 0.8) 50%, rgba(197, 168, 104, 0.45) 75%, transparent 100%);
   transform: translateY(-50%);
-  pointer-events: none;
 }
 
-/* Natural tilt variations */
+/* Natural rotation variations */
 .tape-tilt-left {
-  transform: translateX(-50%) rotate(-2.8deg);
+  transform: translateX(-50%) rotate(-3deg);
 }
 
 .tape-tilt-right {
-  transform: translateX(-50%) rotate(2.4deg);
+  transform: translateX(-50%) rotate(2.8deg);
 }
 
 .tape-tilt-soft {
-  transform: translateX(-50%) rotate(-0.8deg);
+  transform: translateX(-50%) rotate(-1deg);
 }
 
 .tape-corner-left {
   left: 24px;
-  top: -9px;
-  transform: rotate(-10deg);
+  top: -12px;
+  transform: rotate(-13deg);
 }
 
 /* Subtle Film Grain Noise Texture */
